@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SafeBox</string>
+    <string name="add" translatable="true">Add</string>
+
+
+    <string name="hello_blank_fragment" translatable="true">Hello blank fragment</string>
+    <string name="category_name" translatable="true">Category Name</string>
+    <string name="save" translatable="true">Save</string>
+    <string name="reset" translatable="true">Reset</string>
+</resources>
