@@ -18,14 +18,15 @@ class MainActivity : AppCompatActivity(), CategoryFragment.CategoryFragmentListe
 
         var transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout,CategoryFragment.newInstance("","",this),"CATEGORY")
-        transaction.addToBackStack("CATEGORY")
+        //transaction.addToBackStack("CATEGORY")
         transaction.commit()
 
     }
 
     override fun clicked() {
         var transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout,CreateCategoryFragment.newInstance("","",this),"ADD_CATEGORY")
+        transaction.replace(R.id.frame_layout,
+            CreateCategoryFragment.newInstance("","",this),"ADD_CATEGORY")
         transaction.commit()
     }
 
@@ -33,6 +34,4 @@ class MainActivity : AppCompatActivity(), CategoryFragment.CategoryFragmentListe
         var viewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         viewModel.addCategory(category)
     }
-
-
 }

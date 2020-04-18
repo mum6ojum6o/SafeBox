@@ -80,7 +80,6 @@ class CreateCategoryFragment : Fragment(),View.OnClickListener {
                     etCategoryName.text.toString()
                 )
             )
-
         }
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }

@@ -57,7 +57,7 @@ abstract class AppDatabase:RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "safebox_database"
-                ).addCallback(AppDatabaseCallback(scope))
+                )/*.addCallback(AppDatabaseCallback(scope))*/
                     .build()
                 INSTANCE = instance
                 return instance
