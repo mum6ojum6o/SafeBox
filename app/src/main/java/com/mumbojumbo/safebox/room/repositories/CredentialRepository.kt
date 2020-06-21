@@ -9,6 +9,9 @@ class CredentialRepository(val credentialDao: CredetialDao,categoryId:String) {
     val credentials:LiveData<List<Credential>> = credentialDao.getAllCredentialByCategory(categoryId)
 
     fun insert(credential:Credential){
-        credentialDao.add(credential)
+        Thread(Runnable(){credentialDao.add(credential)}).start()
     }
+
+
+
 }

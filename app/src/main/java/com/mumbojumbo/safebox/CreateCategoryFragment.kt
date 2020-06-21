@@ -81,6 +81,8 @@ class CreateCategoryFragment : Fragment(),View.OnClickListener {
                 )
             )
         }
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.frame_layout,CategoryFragment.newInstance("","",activity as MainActivity),"CATEGORY")
+            ?.commit()
     }
 }

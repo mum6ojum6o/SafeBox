@@ -18,7 +18,7 @@ class CredentialListItemViewHolder(view: View):
     init{
         description = view.findViewById<TextView>(R.id.tv_description)
         viewCredentials = view.findViewById<ImageView>(R.id.iv_view_credentials)
-        viewCredentials.setOnClickListener(this)
+        view.setOnClickListener(this)
     }
 
     fun setData(credential: Credential){

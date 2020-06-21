@@ -26,6 +26,7 @@ abstract class AppDatabase:RoomDatabase() {
             INSTANCE?.let {
                     database: AppDatabase -> scope.launch{
                 populateCategories(database.categoryDao())
+                populateDummyCredentials(database.credentialDao())
                 }
             }
         }
@@ -39,6 +40,12 @@ abstract class AppDatabase:RoomDatabase() {
 
             }).start()
 
+        }
+
+        fun populateDummyCredentials(credentialDao:CredetialDao){
+            Thread(Runnable {
+                credentialDao.add(Credential(0,"test","test_PWd","test",52))
+            }).start()
         }
     }
 

@@ -8,4 +8,10 @@
     <string name="save" translatable="true">Save</string>
     <string name="reset" translatable="true">Reset</string>
     <string name="Credentials" translatable="true">Credentials</string>
+    <string name="add_credentials" translatable="true">Add Credentials</string>
+    <string name="username" translatable="true">Username</string>
+    <string name="password" translatable="true">Password</string>
+    <string name="desc" translatable="true">Description</string>
+    <string name="enter_username" translatable="true">Enter Username</string>
+
 </resources>

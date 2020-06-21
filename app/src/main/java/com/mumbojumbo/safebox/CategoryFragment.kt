@@ -71,7 +71,7 @@ class CategoryFragment : Fragment(),View.OnClickListener,CategoryAdapter.Categor
     companion object {
         /************************************************
          * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
+         * this fragment using the provided parameters.C
          *********************************************************
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
