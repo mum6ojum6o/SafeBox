@@ -9,9 +9,15 @@
     <string name="reset" translatable="true">Reset</string>
     <string name="Credentials" translatable="true">Credentials</string>
     <string name="add_credentials" translatable="true">Add Credentials</string>
+    <string name="display_credentials" translatable="true">Display Credentials</string>
     <string name="username" translatable="true">Username</string>
     <string name="password" translatable="true">Password</string>
+    <string name="confirm_password" translatable="true">Confirm Password</string>
     <string name="desc" translatable="true">Description</string>
     <string name="enter_username" translatable="true">Enter Username</string>
+    <string name="username_error" translatable="true">Please enter an appropriate Username</string>
+    <string name="password_error" translatable="true">Please enter an appropriate Password</string>
+    <string name="confirm_password_error" translatable="true">The passwords do not match</string>
+    <string name="description_error" translatable="true">Please enter an appropriate Description</string>
 
 </resources>

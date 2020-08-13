@@ -13,7 +13,7 @@ interface CredetialDao{
     @Query("SELECT * FROM credential WHERE categoryId=:categoryId ORDER BY description ASC")
     fun getAllCredentialByCategory(categoryId:String):LiveData<List<Credential>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(credential: Credential)
 
     @Query("SELECT * FROM credential where id=:id")

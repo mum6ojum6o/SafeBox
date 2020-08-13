@@ -8,7 +8,6 @@ import com.mumbojumbo.safebox.R
 import com.mumbojumbo.safebox.adapters.CredentialListAdapter
 import com.mumbojumbo.safebox.room.entities.Credential
 
-
 class CredentialListItemViewHolder(view: View):
     RecyclerView.ViewHolder(view),View.OnClickListener{
     var description:TextView

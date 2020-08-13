@@ -105,7 +105,7 @@ class CredentialListFragment : Fragment(),View.OnClickListener,CredentialListAda
 
                 Log.d("CredentialListFragment","Credential List updated {${credentials.size}}")
                 adapter.updateCredentialList(credentials)
-                adapter.notifyDataSetChanged()
+                //adapter.notifyDataSetChanged()
             }
         })
     }

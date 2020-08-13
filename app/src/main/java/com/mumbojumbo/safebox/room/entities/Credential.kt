@@ -37,6 +37,30 @@ class Credential(@PrimaryKey(autoGenerate = true) val id:Int,
         return 0
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Credential
+
+        if (id != other.id) return false
+        if (username != other.username) return false
+        if (password != other.password) return false
+        if (description != other.description) return false
+        if (categoryId != other.categoryId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + username.hashCode()
+        result = 31 * result + password.hashCode()
+        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + categoryId
+        return result
+    }
+
     companion object CREATOR : Parcelable.Creator<Credential> {
         override fun createFromParcel(parcel: Parcel): Credential {
             return Credential(parcel)

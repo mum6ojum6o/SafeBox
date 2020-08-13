@@ -7,7 +7,8 @@ import com.mumbojumbo.safebox.R
 import com.mumbojumbo.safebox.room.entities.Category
 import com.mumbojumbo.safebox.viewholders.CategoryViewHolder
 
-class CategoryAdapter(var categories:List<Category>,var categoryClickListener: CategoryClickListener):RecyclerView.Adapter<CategoryViewHolder>() {
+class CategoryAdapter(var categories:List<Category>,var categoryClickListener: CategoryClickListener)
+    :RecyclerView.Adapter<CategoryViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val layout = layoutInflater.inflate(R.layout.category_item,parent,false)

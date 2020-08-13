@@ -9,9 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.commit
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mumbojumbo.safebox.room.entities.Credential
 import kotlinx.android.synthetic.main.fragment_add_credential.*
+import kotlinx.android.synthetic.main.fragment_add_credential.et_username
+import kotlinx.android.synthetic.main.fragment_add_credential_md.*
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_CATID = "CATEGORRY_ID"
@@ -23,6 +26,7 @@ private const val ARG_CATID = "CATEGORRY_ID"
  */
 class AddCredentialFragment : Fragment(),View.OnClickListener {
     private var categoryId: Int? = null
+    private var credential:Credential? = null
     private  lateinit var fabSave: FloatingActionButton
     private  lateinit var fabReset : FloatingActionButton
     private lateinit var fabCancel: FloatingActionButton
@@ -32,7 +36,9 @@ class AddCredentialFragment : Fragment(),View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            categoryId = it.getInt(ARG_CATID)
+
+            if(it.containsKey(ARG_CATID))
+                categoryId = it.getInt(ARG_CATID)
         }
 
     }
@@ -43,7 +49,7 @@ class AddCredentialFragment : Fragment(),View.OnClickListener {
     ): View? {
         // Inflate the layout for this fragment
         Toast.makeText(activity,"New Credential for categoryId : "+categoryId, Toast.LENGTH_SHORT).show()
-        var layout =  inflater.inflate(R.layout.fragment_add_credential, container, false)
+        var layout =  inflater.inflate(R.layout.fragment_add_credential_md, container, false)
         fabSave = layout.findViewById(R.id.fab_save)
         fabReset = layout.findViewById(R.id.fab_reset)
         fabCancel = layout.findViewById(R.id.fab_cancel)
@@ -51,17 +57,27 @@ class AddCredentialFragment : Fragment(),View.OnClickListener {
         fabCancel.setOnClickListener(this)
         fabReset.setOnClickListener(this)
         setupViewModel()
+
+
         return layout
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(credential!=null) {
+            populateUI()
+        }
+    }
+
+    fun populateUI(){
+        et_username.setText(credential?.username)
+        et_password.setText(credential?.password)
+        et_confirm_password.setText(credential?.password)
+        et_desc.setText(credential?.description)
+    }
+
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Category Id.
-         * @return A new instance of fragment AddCredentialFragment.
-         */
         @JvmStatic
         fun newInstance(param1: Int, listener: SaveButtonClickListener) =
             AddCredentialFragment().apply {
@@ -70,13 +86,26 @@ class AddCredentialFragment : Fragment(),View.OnClickListener {
                 }
                 saveButtonClickListener = listener
             }
+
+        fun newInstance(credential: Credential,listener:SaveButtonClickListener)=
+            AddCredentialFragment().apply {
+                saveButtonClickListener = listener
+                this.credential = credential
+            }
+
     }
+
 
     fun resetViews(){
         et_username.setText(R.string.enter_username)
-        et_pwd.text.clear()
-        et_confirmpwd.setText("Re-enter Password")
-        et_description.text.clear()
+        et_password.text?.clear()
+        et_confirm_password.setText("Re-enter Password")
+        et_desc.setText("Enter Description")
+        textFieldLayout_password.error = null
+        textFieldLayout_username.error = null
+        textFieldLayout_confirm_password.error = null
+        textFieldLayout_desc.error = null
+
     }
 //method to validate credentials
 
@@ -84,37 +113,41 @@ fun validateFormEntries():Boolean{
         var result = false;
 
         if(et_username.text.length > 0 && !et_username.text.equals(R.string.enter_username)){
-            if(et_pwd.text.length > 0 ){
-                if(et_description.length() > 0){
-                    if(et_confirmpwd.length() > 0 || !et_confirmpwd.text.equals(et_pwd.text)){
+            textFieldLayout_username.error = null
+            if((et_confirm_password.text?.length ?:0) > 0 ){
+                textFieldLayout_password.error = null
+
+                if(et_desc.length() > 0){
+                    textFieldLayout_desc.error = null
+                    if(et_confirm_password.length()  > 0 && (et_confirm_password.text?.toString()?.equals(et_password.text?.toString()))?:false ){
+                        textFieldLayout_confirm_password.error = null
                         Toast.makeText(activity,"Validations Complete",Toast.LENGTH_SHORT).show()
                         result = true
                     }
                     else{
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            et_confirmpwd.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
-                            et_pwd.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
-
+                            textFieldLayout_confirm_password.error=resources.getString(R.string.confirm_password_error)
                         }
-
                     }
-
                 }
                 else {
                     //Highlight label under desc
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        et_description.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                        //et_desc.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                        textFieldLayout_desc.error=resources.getString(R.string.description_error)
                     }
                 }
             }else{
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    et_pwd.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                    //et_password.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                    textFieldLayout_password.error= resources.getString(R.string.password_error)
                 }
             }
         }else{
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                et_username.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                //et_username.setBackgroundColor(resources.getColor(R.color.colorAccent,null))
+                textFieldLayout_username.error = resources.getString(R.string.username_error)
             }
         }
 
@@ -122,19 +155,22 @@ fun validateFormEntries():Boolean{
     }
 
     fun saveCredentialsToDB(){
-        if(validateFormEntries()){
-             var credential = Credential(0,
-                 et_username.text.toString(),
-             et_pwd.text.toString(),et_description.text.toString(),
-                 this.categoryId?:-1)
 
+        if(validateFormEntries()){
+             var credential = Credential(credential?.id?:0,
+                 et_username.text.toString(),
+             et_password.text.toString(),et_desc.text.toString(),
+                 this.categoryId?:credential?.categoryId?:-1)
              credentialViewModel.addCredential(credential)
-            saveButtonClickListener.redirectToCredentialListFragment(categoryId?:-1) //redirect
+            var supportFragmentManager = activity?.supportFragmentManager
+            var fragmentTransaction = supportFragmentManager?.beginTransaction()
+            supportFragmentManager?.popBackStackImmediate()
+            fragmentTransaction?.commit()
+            //saveButtonClickListener.redirectToCredentialListFragment(categoryId?:-1) //redirect
+           // activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
 
         }
     }
-
-
 
     fun setupViewModel(){
         credentialViewModel =
@@ -149,7 +185,11 @@ fun validateFormEntries():Boolean{
 
             }
             R.id.fab_cancel -> {
-                saveButtonClickListener.redirectToCredentialListFragment(categoryId?:-1)
+                //saveButtonClickListener.redirectToCredentialListFragment(categoryId?:-1)
+                var supportFragmentManager = activity?.supportFragmentManager
+                var fragmentTransaction = supportFragmentManager?.beginTransaction()
+                supportFragmentManager?.popBackStackImmediate()
+                fragmentTransaction?.commit()
             }
             R.id.fab_reset -> resetViews()
         }
